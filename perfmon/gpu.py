@@ -215,8 +215,8 @@ class DemoReader:
         self.rnd = random.Random(3)
 
     def read(self):
-        t = time.time() - self.t0
-        u = max(0.0, min(100.0, 38 + 30 * math.sin(t / 9) + self.rnd.uniform(-6, 6)))
+        t = time.time()   # 用绝对时间，和演示历史曲线（collector.DemoCollector）接得上
+        u = max(0.0, min(100.0, 42 + 22 * math.sin(t / 45) + 6 * math.sin(t / 7) + self.rnd.uniform(-3, 3)))
         return [{"name": "NVIDIA GeForce RTX 4070 (演示)", "util": u,
                  "mem_used": int((4.2 + 1.5 * math.sin(t / 30)) * 2**30), "mem_total": 12 * 2**30,
                  "temp": 52 + u * .22, "power": 40 + u * 1.6, "power_limit": 200.0, "fan": 30 + u * .4,

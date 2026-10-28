@@ -1,30 +1,82 @@
-MIT License
+PerfSkin —— 非商业使用许可
+PerfSkin License (Non-Commercial)
+版本 1.0 / Version 1.0
 
+版权所有 (c) 2026 FrankHuahua
 Copyright (c) 2026 FrankHuahua
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+==================== 中文条款 ====================
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+一、授权范围
+在遵守本许可的前提下，任何人可以免费获得本软件及其源代码，并：
+  1. 为个人、学习、研究目的使用、运行本软件；
+  2. 修改源代码，制作衍生版本（包括制作和分享皮肤）；
+  3. 以非商业方式分发本软件的原版或修改版，但必须保留本许可全文、
+     版权声明和作者信息，并注明来源仓库地址
+     https://github.com/FrankHuahua/PerfSkin 。
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+二、商业用途限制
+未经作者事先书面授权，禁止将本软件或其任何部分用于商业用途，
+包括但不限于：出售、出租、付费捆绑、付费下载、付费代装、作为收费
+服务或收费产品的一部分进行分发或集成、通过本软件直接或间接获利。
+如需商业授权，请联系作者：wxl995232151@gmail.com
 
----------------------------------------------------------------------------
-Not covered by this license / 不在本许可证范围内：
+三、免责声明
+本软件按“现状”提供，不附带任何明示或暗示的担保，包括但不限于
+适销性、特定用途适用性和非侵权的担保。本软件会读取系统性能数据，
+并可按使用者的操作结束进程、写入开机自启注册表项；这些操作均由
+使用者自行决定并承担全部风险。在任何情况下，作者均不对因使用或
+无法使用本软件而导致的任何直接、间接、偶然或后果性损害（包括数据
+丢失、未保存的工作丢失、系统异常等）承担责任。
 
-- skins/maid/*  (the "暖焰女仆" character artwork) — © FrankHuahua, all rights
-  reserved. You may redistribute it unmodified as part of PerfSkin; any other
-  use needs the author's permission.
-- assets/fonts/InterVariable.woff — Inter, SIL Open Font License 1.1
-  (see assets/fonts/OFL-Inter.txt).
+四、第三方内容
+  1. 内置皮肤“暖焰女仆”的立绘（skins/maid/ 下的图片）版权归作者所有，
+     只能随 PerfSkin 原样分发，不得单独提取、转售或用于其他项目。
+  2. 字体 Inter（assets/fonts/）使用 SIL Open Font License 1.1，
+     见 assets/fonts/OFL-Inter.txt。
+  3. 使用者上传的皮肤图片，其版权归原权利人所有，由使用者自行负责。
+
+五、其他
+本软件仅供用于使用者自己拥有或已获授权的设备，不得用于任何未经
+授权或违法的目的。PerfSkin 是个人项目，与任何公司无关。
+
+==================== English Terms ====================
+
+1. Grant
+Subject to this license, any person may obtain this software and its
+source code free of charge and may: (a) use and run it for personal,
+educational, or research purposes; (b) modify the source and create
+derivative works, including skins; (c) distribute the original or
+modified software for NON-COMMERCIAL purposes only, provided that this
+entire license, the copyright notice, and author information are
+retained and the source repository (https://github.com/FrankHuahua/PerfSkin)
+is credited.
+
+2. Non-Commercial Restriction
+Without the author's prior written permission, you may NOT use this
+software or any part of it for commercial purposes, including but not
+limited to selling, renting, paid bundling, paid downloads, paid
+installation services, distribution or integration as part of a paid
+product or service, or otherwise profiting directly or indirectly from
+it. For a commercial license, contact: wxl995232151@gmail.com
+
+3. Disclaimer
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED. It reads system performance data and, when the user chooses,
+can end processes and write an autostart registry entry; all such actions
+are taken at the user's sole risk. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY (INCLUDING DATA LOSS, LOSS OF
+UNSAVED WORK, OR SYSTEM MALFUNCTION) ARISING FROM THE USE OF THIS SOFTWARE.
+
+4. Third-party content
+(a) The artwork of the built-in "maid" skin (images under skins/maid/) is
+    copyrighted by the author and may only be distributed unmodified as part
+    of PerfSkin; it may not be extracted, resold, or used in other projects.
+(b) The Inter font (assets/fonts/) is licensed under the SIL Open Font
+    License 1.1; see assets/fonts/OFL-Inter.txt.
+(c) Images users upload as skins remain the property of their owners and
+    are the uploader's responsibility.
+
+5. Misc
+Use this software only on devices you own or are authorized to manage.
+PerfSkin is a personal project and is not affiliated with any company.

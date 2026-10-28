@@ -253,7 +253,7 @@
     pending = b.dataset.name;
     $("#cf-name").textContent = short(pending);
     const n = +b.dataset.count;
-    $("#cf-body").textContent = `将结束 ${n > 1 ? "全部 " + n + " 个" : "这个"}「${pending}」进程，里面没保存的内容会丢失。系统关键进程不会被结束。`;
+    $("#cf-body").textContent = `将结束${n > 1 ? "全部 " + n + " 个" : "这个"}「${pending}」进程，里面没保存的内容会丢失。系统关键进程不会被结束。`;
     cf.showModal();
   });
   $("#cf-cancel").addEventListener("click", () => cf.close());

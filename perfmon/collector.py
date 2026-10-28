@@ -387,22 +387,68 @@ class Collector(threading.Thread):
 
 # ---------------------------------------------------------------- 演示数据（--demo）：让界面在任何电脑上都有起伏
 class DemoCollector(Collector):
-    """演示模式：一台虚构的游戏电脑，方便截图和调界面（真实的进程、网卡数据照常采集）。"""
+    """演示模式：一台虚构的游戏电脑，方便截图和调界面（真实的网卡数据照常采集，进程是虚构的）。"""
+
+    # (名字, 数量, 基础 CPU%, 内存 MB)
+    FAKE_PROCS = [
+        ("Cyberpunk2077.exe", 1, 18.0, 7350), ("chrome.exe", 32, 3.4, 3480), ("Code.exe", 12, 1.6, 1210),
+        ("steamwebhelper.exe", 6, 0.9, 640), ("Discord.exe", 6, 0.7, 520), ("msedgewebview2.exe", 8, 0.4, 410),
+        ("explorer.exe", 1, 0.3, 180), ("WeChat.exe", 3, 0.3, 350), ("cloudmusic.exe", 4, 0.5, 290),
+        ("dwm.exe", 1, 1.1, 120), ("NVIDIA Overlay.exe", 2, 0.2, 140), ("OneDrive.exe", 1, 0.1, 95),
+        ("PerfSkin.exe", 1, 0.2, 28), ("System", 1, 0.4, 2), ("csrss.exe", 2, 0.1, 6), ("svchost.exe", 78, 0.6, 980),
+    ]
 
     def __init__(self, cfg: dict, demo=True):
         super().__init__(cfg, demo=True)
         self.info.update(host="DEMO-PC", os="Windows 11 24H2", cpu_name="Intel(R) Core(TM) i5-14600KF",
                          cores=14, threads=20, mem_total=32 * 2**30)
+        # 预先填满历史，打开就能看到完整的 10 分钟曲线
+        now = time.time()
+        n = self._hist.maxlen
+        for i in range(n, 0, -1):
+            self._hist.append(self._demo_h(now - i * self.interval))
+
+    @staticmethod
+    def _wave(t):
+        return 32 + 16 * math.sin(t / 70) + 7 * math.sin(t / 13) + 4 * math.sin(t / 2.3)
+
+    def _demo_h(self, t):
+        k = self._rnd
+        cpu = max(2, min(100, self._wave(t) + k.uniform(-4, 4)))
+        mem = 46 + 5 * math.sin(t / 40) + k.uniform(-.3, .3)
+        gpu = max(0.0, min(100.0, 42 + 22 * math.sin(t / 45) + 6 * math.sin(t / 7) + k.uniform(-3, 3)))
+        rx = max(0, 2.4e6 + 2.2e6 * math.sin(t / 5) + k.uniform(0, 4e5))
+        tx = max(0, 3.2e5 + 2.5e5 * math.sin(t / 4 + 1))
+        dr = max(0, 1.8e7 * max(0, math.sin(t / 6)) + k.uniform(0, 2e5))
+        dw = max(0, 6e6 * max(0, math.sin(t / 8 + 2)) + k.uniform(0, 1e5))
+        return {"t": round(t, 2), "cpu": round(cpu, 1), "mem": round(mem, 1), "gpu": round(gpu, 1),
+                "vram": round(100 * (4.2 + 1.5 * math.sin(t / 30)) / 12, 1), "rx": int(rx), "tx": int(tx),
+                "dr": int(dr), "dw": int(dw), "disk": round(min(100, (dr + dw) / 3.5e5), 1)}
+
+    def _processes(self):
+        t = time.time()
+        k = self._rnd
+        cpu_now = max(5.0, self._wave(t))
+        out = []
+        for i, (name, count, c, m) in enumerate(self.FAKE_PROCS):
+            jitter = 1 + 0.35 * math.sin(t / 5 + i) + k.uniform(-.1, .1)
+            cpu = c * jitter * (cpu_now / 30 if i == 0 else 1)
+            out.append({"name": name, "count": count, "cpu": round(max(0.0, min(100.0, cpu)), 1),
+                        "mem": int(m * (1 + .03 * math.sin(t / 20 + i)) * 2**20), "pid": 1000 + i * 4,
+                        "protected": is_protected(name)})
+        return {"cpu": sorted(out, key=lambda g: -g["cpu"])[:15], "mem": sorted(out, key=lambda g: -g["mem"])[:15],
+                "count": 287}
 
     def sample(self):
         snap = super().sample()
         t = time.time()
         k = self._rnd
-        wave = 34 + 22 * math.sin(t / 7) + 10 * math.sin(t / 2.3) + k.uniform(-4, 4)
+        wave = self._wave(t) + k.uniform(-4, 4)
         n = 20
         snap["cpu"]["per_core"] = [round(max(1, min(100, wave + 25 * math.sin(t / 3 + i) + k.uniform(-8, 8))), 1)
                                    for i in range(n)]
         snap["cpu"]["percent"] = sum(snap["cpu"]["per_core"]) / n
+        snap["cpu"]["procs"] = 287
         mp = 46 + 5 * math.sin(t / 40) + k.uniform(-.3, .3)
         tot = 32 * 2**30
         snap["mem"].update(total=tot, percent=round(mp, 1), used=int(tot * mp / 100), available=int(tot * (1 - mp / 100)))

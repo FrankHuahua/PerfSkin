@@ -219,3 +219,14 @@ input[type="range"]{accent-color:var(--accent);width:100%}
   .ptable .cell .meter{display:none}
   .live span{display:none}
 }
+
+/* 关于与声明 */
+.about{font-size:13px;line-height:1.65;color:var(--muted)}
+.about b{color:var(--ink);font-weight:600}
+.about ul{margin:8px 0 14px;padding-left:18px}
+.about li{margin:2px 0}
+.about dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 12px}
+.about dt{color:var(--faint)}
+.about dd{margin:0;color:var(--ink)}
+.about a{color:var(--accent);text-decoration:none}
+.about a:hover{text-decoration:underline}

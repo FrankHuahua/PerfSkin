@@ -31,7 +31,7 @@ jobs:
           PYTHONIOENCODING: utf-8
 
   release:
-    # 推送 v* 标签时打包 Windows 版并发布到 Releases
+    # 推送 v* 标签时打包 Windows 版：zip（文件夹版）+ 单文件 exe，附 SHA-256
     if: startsWith(github.ref, 'refs/tags/v')
     needs: test
     runs-on: windows-latest
@@ -41,15 +41,57 @@ jobs:
         with:
           python-version: "3.13"
       - run: python -m pip install -r requirements.txt pyinstaller
-      - name: Build
+      - name: Build folder version
         run: >
           python -m PyInstaller --noconfirm --windowed --name PerfSkin
           --icon assets/icon.ico --hidden-import pystray._win32 --collect-submodules perfmon
           --add-data "web;web" --add-data "assets;assets" --add-data "skins;skins"
           main.py
-      - name: Zip
-        run: Compress-Archive -Path dist/PerfSkin/* -DestinationPath PerfSkin-${{ github.ref_name }}-windows-x64.zip
-      - uses: softprops/action-gh-release@v2
-        with:
-          files: PerfSkin-*.zip
-          generate_release_notes: true
+      - name: Build single exe
+        run: >
+          python -m PyInstaller --noconfirm --windowed --onefile --name PerfSkin
+          --distpath onefile --workpath build-onefile
+          --icon assets/icon.ico --hidden-import pystray._win32 --collect-submodules perfmon
+          --add-data "web;web" --add-data "assets;assets" --add-data "skins;skins"
+          main.py
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force out | Out-Null
+          Copy-Item LICENSE dist/PerfSkin/LICENSE.txt
+          Compress-Archive -Path dist/PerfSkin -DestinationPath "out/PerfSkin-$env:GITHUB_REF_NAME-windows-x64.zip"
+          Copy-Item onefile/PerfSkin.exe out/PerfSkin.exe
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $zip = "PerfSkin-$env:GITHUB_REF_NAME-windows-x64.zip"
+          $hz = (Get-FileHash "out/$zip" -Algorithm SHA256).Hash
+          $he = (Get-FileHash out/PerfSkin.exe -Algorithm SHA256).Hash
+          $notes = @"
+          ## 下载哪个？
+
+          - **$zip**（推荐）：解压到任意文件夹，运行里面的 ``PerfSkin.exe``，启动快。
+          - **PerfSkin.exe**：单文件版。请先放进一个单独的文件夹再运行（配置、日志、皮肤会存在它旁边），每次启动要先自解压，稍慢。
+
+          系统要求：Windows 10 / 11 64 位，系统自带 Edge 即可，不用装 Python。
+
+          ## SHA-256
+
+          | 文件 | SHA-256 |
+          |---|---|
+          | $zip | ``$hz`` |
+          | PerfSkin.exe | ``$he`` |
+
+          PowerShell 核对：``Get-FileHash .\PerfSkin.exe -Algorithm SHA256``，结果一致才是原版。
+          首次运行弹出“Windows 已保护你的电脑”时，点“更多信息 → 仍要运行”（没有购买代码签名证书）。
+
+          ## 许可
+
+          免费、源码公开、**禁止商用**（[PerfSkin 非商业使用许可](https://github.com/FrankHuahua/PerfSkin/blob/main/LICENSE)）。在网店、二手平台看到有人卖，那一定不是作者发的。
+
+          更新内容见 [CHANGELOG](https://github.com/FrankHuahua/PerfSkin/blob/main/CHANGELOG.md)。
+          "@
+          $notes = ($notes -split "`n" | ForEach-Object { $_ -replace '^          ', '' }) -join "`n"
+          gh release create $env:GITHUB_REF_NAME "out/$zip" out/PerfSkin.exe --title "PerfSkin $env:GITHUB_REF_NAME" --notes $notes

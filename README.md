@@ -50,7 +50,13 @@ PerfSkin 的原则是“监控工具自己不能成为负担”：
 
 ## 安装
 
-**下载即用**：到 [Releases](https://github.com/FrankHuahua/PerfSkin/releases) 下载 `PerfSkin-*-windows-x64.zip`，解压后运行 `PerfSkin.exe`。
+**下载即用**（Windows 10 / 11 64 位，系统自带 Edge 即可，不用装 Python）。到 [Releases](https://github.com/FrankHuahua/PerfSkin/releases) 二选一：
+
+- `PerfSkin-*-windows-x64.zip`（**推荐**）：解压到任意文件夹，运行里面的 `PerfSkin.exe`，启动快；
+- `PerfSkin.exe`：单文件版，**先放进一个单独的文件夹再运行**（配置、日志、你的皮肤都会存在它旁边）。每次启动要先自解压，比 zip 版慢一两秒。
+
+Release 页面写了每个文件的 SHA-256，下载后可以在 PowerShell 里用 `Get-FileHash .\PerfSkin.exe` 核对。
+首次运行如果弹出“Windows 已保护你的电脑”，是因为没有购买代码签名证书，点“更多信息 → 仍要运行”即可。
 
 **从源码运行**（需要 Python 3.9+）：
 
@@ -96,8 +102,15 @@ python -m unittest discover tests    # 测试
 
 ## 许可
 
-代码使用 [MIT](LICENSE) 许可。内置皮肤“暖焰女仆”的立绘版权归作者所有，不随 MIT 授权（只能随 PerfSkin 原样分发）；
-字体 Inter 使用 SIL Open Font License。PerfSkin 是个人项目，与任何公司无关。
+**免费、源码公开、禁止商用。** 使用 [PerfSkin 非商业使用许可](LICENSE)：
+
+- 可以免费使用、学习、修改，可以做皮肤、分享皮肤；
+- 可以非商业地转发原版或修改版，但要保留许可全文并注明来源仓库；
+- **禁止任何商业用途**：出售、付费下载、捆绑收费、付费代装、集成进收费产品或服务。在二手平台、网店看到有人卖它，那一定不是作者发的；
+- 按现状提供，不附带任何担保。“结束进程”等操作由你自己决定，请先保存好手头的工作。
+
+内置皮肤“暖焰女仆”的立绘版权归作者所有，只能随 PerfSkin 原样分发；字体 Inter 使用 SIL Open Font License。
+需要商业授权请联系 wxl995232151@gmail.com。PerfSkin 是个人项目，与任何公司无关。
 
 ---
 
@@ -114,4 +127,7 @@ Drop an image in and the whole UI picks up a matching ground tone and accent col
   when hidden. The top bar shows PerfSkin's own usage.
 - Always-on-top mini window, high-load notifications, autostart, everything stored in the program folder.
 
-Run `install_and_run.bat` (Python 3.9+) or grab the zip from Releases. The UI is in Chinese for now — translations welcome.
+Run `install_and_run.bat` (Python 3.9+) or grab the zip / single exe from Releases. The UI is in Chinese for now — translations welcome.
+
+**License:** free for personal, educational and non-commercial use under the [PerfSkin Non-Commercial License](LICENSE).
+Commercial use (selling, paid bundling, paid installs, integration into paid products) requires written permission.
