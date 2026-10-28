@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python: ["3.9", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -v tests
+      - run: python main.py --once --demo
+
+  release:
+    # 推送 v* 标签时打包 Windows 版并发布到 Releases
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install -r requirements.txt pyinstaller
+      - name: Build
+        run: >
+          python -m PyInstaller --noconfirm --windowed --name PerfSkin
+          --icon assets/icon.ico --hidden-import pystray._win32 --collect-submodules perfmon
+          --add-data "web;web" --add-data "assets;assets" --add-data "skins;skins"
+          main.py
+      - name: Zip
+        run: Compress-Archive -Path dist/PerfSkin/* -DestinationPath PerfSkin-${{ github.ref_name }}-windows-x64.zip
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: PerfSkin-*.zip
+          generate_release_notes: true

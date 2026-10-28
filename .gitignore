@@ -1,0 +1,12 @@
+# 运行时生成
+.venv/
+.cache/
+dist/
+build/
+__pycache__/
+*.pyc
+*.log
+*.log.*
+config.json
+user_skins/
+.taste-skill/

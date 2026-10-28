@@ -1,0 +1,57 @@
+{
+  "Text": "Sensor",
+  "Children": [
+    {
+      "Text": "工作电脑",
+      "ImageURL": "images_icon/computer.png",
+      "Children": [
+        {
+          "Text": "Intel Core i7-14700K",
+          "ImageURL": "images_icon/cpu.png",
+          "Children": [
+            {"Text": "Temperatures", "Children": [
+              {"Text": "CPU Package", "Value": "47.3 °C", "Type": "Temperature", "SensorId": "/intelcpu/0/temperature/0", "Children": []}
+            ]},
+            {"Text": "Powers", "Children": [
+              {"Text": "CPU Package", "Value": "63.4 W", "Type": "Power", "SensorId": "/intelcpu/0/power/0", "Children": []}
+            ]},
+            {"Text": "Loads", "Children": [
+              {"Text": "CPU Total", "Value": "32.0 %", "Type": "Load", "SensorId": "/intelcpu/0/load/0", "Children": []}
+            ]}
+          ]
+        },
+        {
+          "Text": "NVIDIA GeForce RTX 4080",
+          "ImageURL": "images_icon/nvidia.png",
+          "Children": [
+            {"Text": "Temperatures", "Children": [
+              {"Text": "GPU Core", "Value": "56.2 °C", "Type": "Temperature", "SensorId": "/nvidiagpu/0/temperature/0", "Children": []}
+            ]},
+            {"Text": "Fans", "Children": [
+              {"Text": "GPU Fan", "Value": "1,250 RPM", "Type": "Fan", "SensorId": "/nvidiagpu/0/fan/0", "Children": []}
+            ]}
+          ]
+        },
+        {
+          "Text": "Samsung NVMe SSD",
+          "ImageURL": "images_icon/hdd.png",
+          "Children": [
+            {"Text": "Temperatures", "Children": [
+              {"Text": "Composite", "Value": "40.1 °C", "Type": "Temperature", "SensorId": "/nvme/0/temperature/0", "Children": []}
+            ]}
+          ]
+        },
+        {
+          "Text": "Nuvoton NCT6798D",
+          "ImageURL": "images_icon/chip.png",
+          "Children": [
+            {"Text": "Fans", "Children": [
+              {"Text": "CPU Fan", "Value": "1,180 RPM", "Type": "Fan", "SensorId": "/lpc/nct6798d/0/fan/0", "Children": []},
+              {"Text": "空风扇接口", "Value": "0 RPM", "Type": "Fan", "SensorId": "/lpc/nct6798d/0/fan/1", "Children": []}
+            ]}
+          ]
+        }
+      ]
+    }
+  ]
+}

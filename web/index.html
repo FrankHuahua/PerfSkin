@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>性能监控 · PerfSkin</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/theme.css">
+<link rel="stylesheet" href="/skin.css" id="skin-css">
+<link rel="stylesheet" href="/app.css">
+<script>window.PM_TOKEN = "__PM_TOKEN__";</script>
+<script defer src="/format.js"></script>
+<script defer src="/charts.js"></script>
+<script defer src="/app.js"></script>
+<script defer src="/skins.js"></script>
+</head>
+<body>
+<!-- ================= 顶栏：产品、范围、状态、操作 ================= -->
+<header id="bar">
+  <div class="brand">
+    <svg class="mark" width="18" height="18" viewBox="-50 -50 100 100" aria-hidden="true"><path class="spark-path" fill="currentColor"/></svg>
+    <b>PerfSkin</b>
+    <span class="scope faint" id="scope">正在连接…</span>
+  </div>
+  <div class="actions">
+    <span id="self" class="self faint num" title="PerfSkin 自己（后台进程）的占用"></span>
+    <span id="live" class="live muted"><i></i><span>连接中</span></span>
+    <button class="btn" data-feature="mini" data-action="open-mini" hidden>迷你窗</button>
+    <button class="btn" id="open-skins" aria-haspopup="dialog">皮肤</button>
+    <button class="btn" id="open-settings" aria-haspopup="dialog">设置</button>
+  </div>
+</header>
+
+<main id="canvas">
+  <!-- ================= 第一屏的答案：现在吃不吃力、是谁 ================= -->
+  <section id="hero" class="card span12">
+    <div class="skin-art" aria-hidden="true"><img id="skin-img" alt="" decoding="async"></div>
+    <div class="hero-text">
+      <h1 id="title">此电脑</h1>
+      <p id="finding" class="finding">正在读取数据…</p>
+    </div>
+    <div class="kpis" role="list">
+      <div class="kpi" id="k-cpu" role="listitem">
+        <div class="k-label">处理器</div>
+        <div class="k-value num"><b>–</b><span class="u">%</span></div>
+        <div class="meter lead"><i></i></div>
+        <div class="k-sub faint num"></div>
+      </div>
+      <div class="kpi" id="k-mem" role="listitem">
+        <div class="k-label">内存</div>
+        <div class="k-value num"><b>–</b><span class="u">%</span></div>
+        <div class="meter"><i></i></div>
+        <div class="k-sub faint num"></div>
+      </div>
+      <div class="kpi" id="k-gpu" role="listitem">
+        <div class="k-label">显卡</div>
+        <div class="k-value num"><b>–</b><span class="u">%</span></div>
+        <div class="meter"><i></i></div>
+        <div class="k-sub faint num"></div>
+      </div>
+      <div class="kpi" id="k-disk" role="listitem">
+        <div class="k-label">磁盘活动</div>
+        <div class="k-value num"><b>–</b><span class="u">%</span></div>
+        <div class="meter"><i></i></div>
+        <div class="k-sub faint num"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 趋势 + 网络 ================= -->
+  <section class="card span8" id="timeline">
+    <header class="c-head">
+      <h2>负载走势</h2><span class="faint" id="tl-range">近 10 分钟</span>
+      <span class="spacer"></span>
+      <div class="legend" id="legend" role="group" aria-label="显示的曲线"></div>
+    </header>
+    <div class="plot tall"><canvas id="tl-canvas" aria-label="CPU、内存、显卡占用的历史曲线"></canvas><div class="tip" id="tl-tip" hidden></div></div>
+  </section>
+
+  <section class="card span4 fill" id="net">
+    <header class="c-head"><h2>网络</h2><span class="spacer"></span><span class="faint" id="net-scale"></span></header>
+    <div class="pair">
+      <div><div class="k-label"><i class="dot lead"></i>下载</div><div class="k-value sm num" id="net-rx"><b>–</b></div></div>
+      <div><div class="k-label"><i class="dot"></i>上传</div><div class="k-value sm num" id="net-tx"><b>–</b></div></div>
+    </div>
+    <div class="plot short grow"><canvas id="net-canvas" aria-label="近 90 秒网速"></canvas></div>
+    <ul class="rows compact" id="nics"></ul>
+  </section>
+
+  <!-- ================= 进程 + 磁盘/温度 ================= -->
+  <section class="card span8" id="procs">
+    <header class="c-head">
+      <h2>谁在占用</h2><span class="faint" id="proc-count"></span>
+      <span class="spacer"></span>
+      <div class="seg" role="tablist" aria-label="排序">
+        <button role="tab" data-sort="cpu" aria-selected="true">按处理器</button>
+        <button role="tab" data-sort="mem" aria-selected="false">按内存</button>
+      </div>
+    </header>
+    <table class="ptable">
+      <thead><tr><th class="name">程序</th><th class="num">处理器</th><th class="num">内存</th><th class="act"><span class="sr">操作</span></th></tr></thead>
+      <tbody id="proc-body"></tbody>
+    </table>
+  </section>
+
+  <div class="span4 stack">
+    <section class="card" id="volumes">
+      <header class="c-head"><h2>磁盘空间</h2><span class="spacer"></span><span class="faint" id="vol-free"></span></header>
+      <ul class="rows" id="vol-list"></ul>
+    </section>
+    <section class="card grow" id="sensors">
+      <header class="c-head"><h2>温度与风扇</h2></header>
+      <ul class="rows" id="sensor-list"></ul>
+      <p class="empty" id="sensor-empty" hidden>还没有温度数据。运行 LibreHardwareMonitor 并打开它的网页服务后，这里会显示 CPU、主板和硬盘温度。</p>
+    </section>
+  </div>
+
+  <!-- ================= 每个线程 ================= -->
+  <section class="card span12" id="cores">
+    <header class="c-head"><h2>每个线程</h2><span class="faint num" id="cores-sum"></span><span class="spacer"></span><span class="faint num" id="uptime"></span></header>
+    <div class="bars" id="core-bars"></div>
+  </section>
+</main>
+
+<!-- ================= 皮肤 / 设置 抽屉 ================= -->
+<dialog id="sheet" aria-labelledby="sheet-title">
+  <header class="sheet-head">
+    <h2 id="sheet-title" class="sr">皮肤与设置</h2>
+    <div class="seg" role="tablist">
+      <button role="tab" data-pane="skins" aria-selected="true">皮肤</button>
+      <button role="tab" data-pane="settings" aria-selected="false">设置</button>
+    </div>
+    <span class="spacer"></span>
+    <span class="saved faint" id="saved" hidden>已保存</span>
+    <button class="btn" id="sheet-close" aria-label="关闭">关闭</button>
+  </header>
+
+  <div class="pane" id="pane-skins">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" hidden>
+      <b>上传图片做皮肤</b>
+      <span class="faint">拖到这里或点击选择 · PNG / JPG / WebP，最大 20 MB。会自动取图片主色，整套界面跟着换色。</span>
+    </label>
+    <p class="err" id="skin-err" hidden></p>
+
+    <h3>我的皮肤</h3>
+    <div class="skin-grid" id="skin-grid"></div>
+
+    <h3>当前皮肤</h3>
+    <div class="form" id="skin-edit">
+      <label class="field"><span>名称</span><input id="se-name" maxlength="40"></label>
+      <div class="field"><span>图片放在哪</span>
+        <div class="seg" id="se-layout" role="radiogroup">
+          <button role="radio" data-v="figure">右侧立绘</button>
+          <button role="radio" data-v="backdrop">铺满顶部</button>
+          <button role="radio" data-v="none">不显示</button>
+        </div>
+      </div>
+      <label class="field"><span>图片亮度 <b class="num" id="se-dim-v"></b></span>
+        <input type="range" id="se-dim" min="15" max="100" step="5"></label>
+      <div class="field"><span>强调色</span>
+        <div class="swatches" id="se-swatches"></div>
+        <p class="faint small">从图片里取出的颜色，第一个是自动选的。也可以点最后一格自己挑。</p>
+      </div>
+      <button class="link-danger" id="se-delete">删除这个皮肤</button>
+    </div>
+  </div>
+
+  <div class="pane" id="pane-settings" hidden>
+    <h3>常规</h3>
+    <div class="form">
+      <div class="field"><span>采样间隔</span><div class="seg" id="st-interval" role="radiogroup"></div>
+        <p class="faint small">间隔越长越省电。窗口关着时程序会自动停掉进程统计。</p></div>
+      <label class="switch"><span>开机自动启动<em class="faint">只在托盘里待命，不弹窗口</em></span><input type="checkbox" id="st-autostart"></label>
+      <label class="switch"><span>启动时打开面板</span><input type="checkbox" id="st-open"></label>
+      <label class="switch"><span>立绘说话<em class="faint">标题下面那句话用角色的口吻</em></span><input type="checkbox" id="st-bubble"></label>
+      <label class="switch"><span>迷你窗总在最前</span><input type="checkbox" id="st-topmost"></label>
+    </div>
+    <h3>高负载提醒</h3>
+    <div class="form">
+      <label class="switch"><span>开启提醒<em class="faint">持续超过阈值时弹 Windows 通知，同一项冷却期内只提醒一次</em></span><input type="checkbox" id="st-alerts"></label>
+      <div class="grid2" id="st-limits"></div>
+    </div>
+    <p class="faint small" id="st-about"></p>
+  </div>
+</dialog>
+
+<!-- 结束进程确认 -->
+<dialog id="confirm" aria-labelledby="cf-title">
+  <h2 id="cf-title">结束 <span id="cf-name"></span>？</h2>
+  <p class="muted" id="cf-body"></p>
+  <div class="cf-actions"><button class="btn" id="cf-cancel">取消</button><button class="btn danger" id="cf-ok">结束</button></div>
+</dialog>
+</body>
+</html>

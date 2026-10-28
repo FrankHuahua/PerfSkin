@@ -1,0 +1,57 @@
+{
+  "Text": "Sensor",
+  "Children": [
+    {
+      "Text": "工作电脑",
+      "ImageURL": "images_icon/computer.png",
+      "Children": [
+        {
+          "Text": "AMD Ryzen 7 7800X3D",
+          "ImageURL": "images_icon/cpu.png",
+          "Children": [
+            {"Text": "Temperatures", "Children": [
+              {"Text": "CPU Package", "Value": "45.0 °C", "Children": []}
+            ]},
+            {"Text": "Powers", "Children": [
+              {"Text": "CPU Package", "Value": "35.2 W", "Children": []}
+            ]},
+            {"Text": "Loads", "Children": [
+              {"Text": "CPU Total", "Value": "12.0 %", "Children": []}
+            ]}
+          ]
+        },
+        {
+          "Text": "NVIDIA GeForce RTX 4070",
+          "ImageURL": "images_icon/nvidia.png",
+          "Children": [
+            {"Text": "Temperatures", "Children": [
+              {"Text": "GPU Core", "Value": "53.5 °C", "Children": []}
+            ]},
+            {"Text": "Fans", "Children": [
+              {"Text": "GPU Fan", "Value": "1200 RPM", "Children": []}
+            ]}
+          ]
+        },
+        {
+          "Text": "Samsung SSD 990 PRO",
+          "ImageURL": "images_icon/hdd.png",
+          "Children": [
+            {"Text": "Temperatures", "Children": [
+              {"Text": "NVMe Composite", "Value": "41.0 °C", "Children": []}
+            ]}
+          ]
+        },
+        {
+          "Text": "ASUS 主板",
+          "ImageURL": "images_icon/mainboard.png",
+          "Children": [
+            {"Text": "Fans", "Children": [
+              {"Text": "机箱风扇", "Value": "890 RPM", "Children": []},
+              {"Text": "未连接风扇", "Value": "0 RPM", "Children": []}
+            ]}
+          ]
+        }
+      ]
+    }
+  ]
+}

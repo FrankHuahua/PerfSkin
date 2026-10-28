@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>迷你监控 · PerfSkin</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/theme.css">
+<link rel="stylesheet" href="/skin.css" id="skin-css">
+<link rel="stylesheet" href="/mini.css">
+<script>window.PM_TOKEN = "__PM_TOKEN__";</script>
+<script defer src="/format.js"></script>
+<script defer src="/charts.js"></script>
+<script defer src="/mini.js"></script>
+</head>
+<body>
+<main id="mini" title="双击打开主面板">
+  <header id="mini-head">
+    <svg class="mark" width="14" height="14" viewBox="-50 -50 100 100" aria-hidden="true"><path class="spark-path" fill="currentColor"/></svg>
+    <h1 id="host">PerfSkin</h1>
+    <span id="live"><i></i><span>连接中</span></span>
+  </header>
+  <section id="stats" aria-label="实时性能">
+    <div class="stat" id="cpu-row"><span class="label">处理器</span><div class="meter lead"><i></i></div><span class="value num" id="cpu-value">–</span><span class="extra num" id="cpu-temp"></span></div>
+    <div class="stat" id="mem-row"><span class="label">内存</span><div class="meter"><i></i></div><span class="value num" id="mem-value">–</span><span class="extra num" id="mem-extra"></span></div>
+    <div class="stat" id="gpu-row"><span class="label">显卡</span><div class="meter"><i></i></div><span class="value num" id="gpu-value">–</span><span class="extra num" id="gpu-temp"></span></div>
+    <div class="stat net" id="net-row"><span class="label">网络</span><canvas id="net-curve" aria-label="近 60 秒网速"></canvas><span class="value num" id="net-rate">–</span></div>
+  </section>
+</main>
+</body>
+</html>

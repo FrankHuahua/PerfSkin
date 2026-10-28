@@ -1,0 +1,43 @@
+{
+  "name": "暖焰女仆",
+  "order": 1,
+  "image": "maid.webp",
+  "avatar": "avatar.webp",
+  "layout": "figure",
+  "dim": 1.0,
+  "colors": [
+    {
+      "hex": "#e56439",
+      "weight": 0.0701,
+      "score": 0.3305
+    },
+    {
+      "hex": "#a02517",
+      "weight": 0.0407,
+      "score": 0.1505
+    },
+    {
+      "hex": "#e2b798",
+      "weight": 0.0475,
+      "score": 0.1034
+    },
+    {
+      "hex": "#826a6c",
+      "weight": 0.0507,
+      "score": 0.0738
+    },
+    {
+      "hex": "#430d0c",
+      "weight": 0.0581,
+      "score": 0.048
+    },
+    {
+      "hex": "#4f3a41",
+      "weight": 0.0576,
+      "score": 0.0466
+    }
+  ],
+  "accent": "#d97757",
+  "bg_hue": 0.06,
+  "credit": "立绘由项目作者 FrankHuahua 提供，版权归作者所有，不随 MIT 许可证授权"
+}

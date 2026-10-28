@@ -1,0 +1,49 @@
+/* ==========================================================================
+   PerfSkin 共享样式：主面板和迷你窗都引用这一份。
+   颜色全部来自 /skin.css 生成的变量（随皮肤变化）；这里只放默认值、字体和基础规则。
+
+   设计取向（深色扁平）：
+   - 底色是带温度的近黑，卡片只靠亮度台阶区分，不用描边、阴影、发光；
+   - 颜色只给数据：强调色画主数据，其余用同色温的灰；
+   - 一套字体：Inter 显示数字和拉丁字母（等宽数字），中文落到系统黑体。
+   ========================================================================== */
+@font-face{font-family:"Inter";src:url(/assets/fonts/InterVariable.woff) format("woff");font-weight:100 900;font-display:swap}
+
+:root{
+  /* 默认值 = 内置“暖焰女仆”皮肤；/skin.css 会覆盖 */
+  --accent:#d97757; --accent-l:#e0a28d; --accent-d:#a54525;
+  --ground:#0f0c0b; --surface:#1a1614; --raised:#282320; --active:#302a27; --rule:#231e1b; --control:#504844;
+  --ink:#f6f5f4; --muted:#beb9b6; --faint:#a29c98; --chart2:#dedbd9; --chart3:#867e79;
+  --positive:#3fc07a; --negative:#e5566f; --warning:#e5a93b;
+  --accent-rgb:217 119 87; --ground-rgb:15 12 11; --surface-rgb:26 22 20; --ink-rgb:246 245 244;
+  --skin-dim:1; --skin-image:none; --skin-avatar:none;
+
+  --font:"Inter","Microsoft YaHei UI","Microsoft YaHei","PingFang SC","Noto Sans SC",system-ui,sans-serif;
+  --fs-title:22px; --fs-kpi:30px; --fs-section:15px; --fs-body:14px; --fs-small:12px;
+  --r-card:16px; --r-inner:10px; --gap:14px; --pad:22px; --control-h:32px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ground);color-scheme:dark}
+body{min-height:100vh;background:var(--ground);color:var(--ink);font:400 var(--fs-body)/1.45 var(--font);
+  -webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+button,input,select{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+.u{color:var(--faint);font-size:.62em;font-weight:400;margin-left:.15em}
+.muted{color:var(--muted)}
+.faint{color:var(--faint)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+::selection{background:rgb(var(--accent-rgb) / .35)}
+
+/* 进度条：真实比例；用 transform 动，不触发重排，几乎不花 CPU */
+.meter{position:relative;height:4px;border-radius:4px;background:var(--raised);overflow:hidden}
+.meter>i{position:absolute;inset:0;border-radius:4px;background:var(--chart3);transform-origin:left center;
+  transform:scaleX(0);transition:transform .4s ease-out}
+.meter.lead>i{background:var(--accent)}
+.meter.warn>i{background:var(--warning)}
+.meter.bad>i{background:var(--negative)}
+
+/* 星芒标志（PerfSkin 的 mark），颜色随皮肤强调色 */
+.mark{color:var(--accent);flex:none}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

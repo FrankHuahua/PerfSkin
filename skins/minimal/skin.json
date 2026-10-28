@@ -1,0 +1,9 @@
+{
+  "name": "石墨",
+  "order": 2,
+  "layout": "none",
+  "dim": 0.85,
+  "colors": [],
+  "accent": "#6fa8ff",
+  "bg_hue": 0.6
+}

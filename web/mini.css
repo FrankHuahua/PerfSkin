@@ -1,0 +1,20 @@
+/* 迷你窗：340×176，扁平、只有数字和进度条；颜色随皮肤 */
+html,body{width:100%;height:100%;overflow:hidden}
+body{min-height:0;background:var(--surface);user-select:none}
+#mini{height:100%;padding:10px 14px 12px;display:flex;flex-direction:column;gap:8px}
+#mini-head{display:flex;align-items:center;gap:7px;height:20px}
+#host{flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--faint)}
+#live i{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+#stats{flex:1;display:grid;grid-template-rows:repeat(4,1fr);align-items:center}
+.stat{display:grid;grid-template-columns:44px minmax(0,1fr) 42px 50px;align-items:center;gap:10px;min-width:0}
+.label{font-size:12px;color:var(--muted)}
+.value{font-size:14px;font-weight:500;text-align:right}
+.extra{font-size:12px;color:var(--faint);text-align:right;white-space:nowrap}
+.stat.hot .value{color:var(--warning)}
+.net{grid-template-columns:44px minmax(0,1fr) 150px}
+#net-rate{text-align:right}
+#net-curve{display:block;width:100%;height:22px}
+#net-rate{font-size:12px;font-weight:400;color:var(--muted);white-space:nowrap}
+body.offline #stats{opacity:.5}
+body.offline #live i{background:var(--negative)}
