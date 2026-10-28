@@ -21,7 +21,7 @@
 
 **其他**
 - 演示模式改成一台虚构的游戏电脑，方便截图
-- GitHub Actions：Windows / Linux × Python 3.9 / 3.13 测试；推送 `v*` 标签自动打包发布
+- GitHub Actions：Windows（Python 3.9 / 3.13）和 Linux 上跑测试；推送 `v*` 标签自动打包发布
 
 ## 1.0.0 · 2026-10-18 — 初版（未公开）
 

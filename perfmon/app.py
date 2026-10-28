@@ -361,6 +361,11 @@ def main(argv=None):
     ap.add_argument("--check", action="store_true", help="打印检测到的硬件和数据来源")
     ap.add_argument("-v", "--verbose", action="store_true")
     args = ap.parse_args(argv)
+    for stream in (sys.stdout, sys.stderr):        # 控制台不是 UTF-8 时（例如重定向到文件）也能打印中文
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
 
     app_dir = winsys.app_dir()
     setup_logging(app_dir, args.verbose)
