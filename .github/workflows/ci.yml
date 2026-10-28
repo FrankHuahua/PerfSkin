@@ -5,6 +5,7 @@ on:
     branches: [main]
     tags: ["v*"]
   pull_request:
+  workflow_dispatch:      # 在 Actions 页面手动点 “Run workflow” 发布当前版本
 
 permissions:
   contents: write
@@ -32,7 +33,7 @@ jobs:
 
   release:
     # 推送 v* 标签时打包 Windows 版：zip（文件夹版）+ 单文件 exe，附 SHA-256
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     needs: test
     runs-on: windows-latest
     steps:
@@ -54,19 +55,25 @@ jobs:
           --icon assets/icon.ico --hidden-import pystray._win32 --collect-submodules perfmon
           --add-data "web;web" --add-data "assets;assets" --add-data "skins;skins"
           main.py
+      - name: Version
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF -like 'refs/tags/v*') { $tag = $env:GITHUB_REF_NAME }
+          else { $tag = 'v' + (python -c "import perfmon; print(perfmon.__version__)") }
+          "TAG=$tag" >> $env:GITHUB_ENV
       - name: Package
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force out | Out-Null
           Copy-Item LICENSE dist/PerfSkin/LICENSE.txt
-          Compress-Archive -Path dist/PerfSkin -DestinationPath "out/PerfSkin-$env:GITHUB_REF_NAME-windows-x64.zip"
+          Compress-Archive -Path dist/PerfSkin -DestinationPath "out/PerfSkin-$env:TAG-windows-x64.zip"
           Copy-Item onefile/PerfSkin.exe out/PerfSkin.exe
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: pwsh
         run: |
-          $zip = "PerfSkin-$env:GITHUB_REF_NAME-windows-x64.zip"
+          $zip = "PerfSkin-$env:TAG-windows-x64.zip"
           $hz = (Get-FileHash "out/$zip" -Algorithm SHA256).Hash
           $he = (Get-FileHash out/PerfSkin.exe -Algorithm SHA256).Hash
           $notes = @"
@@ -94,4 +101,4 @@ jobs:
           更新内容见 [CHANGELOG](https://github.com/FrankHuahua/PerfSkin/blob/main/CHANGELOG.md)。
           "@
           $notes = ($notes -split "`n" | ForEach-Object { $_ -replace '^          ', '' }) -join "`n"
-          gh release create $env:GITHUB_REF_NAME "out/$zip" out/PerfSkin.exe --title "PerfSkin $env:GITHUB_REF_NAME" --notes $notes
+          gh release create $env:TAG "out/$zip" out/PerfSkin.exe --target $env:GITHUB_SHA --title "PerfSkin $env:TAG" --notes $notes
